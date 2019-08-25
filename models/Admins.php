@@ -19,6 +19,7 @@ use Yii;
  */
 class Admins extends \yii\db\ActiveRecord
 {
+    public $password_hash,$confirm_password;
     /**
      * {@inheritdoc}
      */
@@ -39,6 +40,12 @@ class Admins extends \yii\db\ActiveRecord
             [['name', 'email'], 'string', 'max' => 50],
             [['password'], 'string', 'max' => 128],
             [['phone'], 'string', 'max' => 32],
+            ['email', 'email'],
+            ['email', 'unique'],
+            [['password_hash','confirm_password'], 'required', 'on' => 'create'],
+            [['password_hash'],'string','min'=>6],
+            ['confirm_password', 'compare', 'compareAttribute' => 'password_hash','message' => Yii::t('yii', 'Confirm Password must be equal to "Password"')],
+            ['phone', 'match', 'pattern' => '/^[0-9-+]+$/', 'message' => Yii::t('yii', 'Your phone can only contain numeric characters with +/-')],
         ];
     }
 
@@ -57,6 +64,8 @@ class Admins extends \yii\db\ActiveRecord
             'updated_at' => 'Updated At',
             'is_active' => 'Is Active',
             'is_deleted' => 'Is Deleted',
+            'password_hash' => Yii::t('app', 'Password'),
+            'confirm_password' => Yii::t('app', 'Confirm Password'),
         ];
     }
 }

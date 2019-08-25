@@ -20,7 +20,8 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
-    <?= GridView::widget([
+    <?=
+    GridView::widget([
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
         'columns' => [
@@ -32,10 +33,23 @@ $this->params['breadcrumbs'][] = $this->title;
             //'updated_at',
             //'is_active',
             //'is_deleted',
-
+            [
+                'label' => 'Status',
+                'attribute' => 'is_active',
+                'format' => 'raw',
+                'value' => function ($model, $url) {
+                    return '<div class="onoffswitch">'
+                            . Html::checkbox('onoffswitch', $model->is_active, ['class' => "onoffswitch-checkbox", 'id' => "active-switch" . $model->admin_id,
+                                'onclick' => 'app.changeStatus("admin/publish",this,' . $model->admin_id . ')',
+                            ])
+                            . '<label class="onoffswitch-label" for="active-switch' . $model->admin_id . '"></label></div>';
+                },
+                'filter' => Html::activeDropDownList($searchModel, 'is_active', [1 => 'Active', 0 => 'Inactive'], ['class' => 'form-control', 'prompt' => 'Filter']),
+            ],
             ['class' => 'yii\grid\ActionColumn'],
         ],
-    ]); ?>
+    ]);
+    ?>
 
 
 </div>

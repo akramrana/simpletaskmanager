@@ -34,7 +34,10 @@ $this->params['breadcrumbs'][] = $this->title;
             'phone',
             'created_at',
             'updated_at',
-            'is_active',
+            [
+                'attribute' => 'is_active',
+                'value' => ($model->is_active==1)?"Yes":"No"
+            ],
         ],
     ]) ?>
 

@@ -2,6 +2,7 @@
 use yii\web\Request;
 $params = require __DIR__ . '/params.php';
 $db = require __DIR__ . '/db.php';
+$functions = require __DIR__ . '/functions.php';
 $baseUrl = str_replace('/web', '', (new Request)->getBaseUrl());
 
 $config = [

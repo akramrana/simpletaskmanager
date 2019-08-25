@@ -46,6 +46,7 @@ class AdminSearch extends Admins
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
+            'sort' => ['defaultOrder' => ['admin_id' => SORT_DESC]],
         ]);
 
         $this->load($params);
@@ -62,7 +63,7 @@ class AdminSearch extends Admins
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
             'is_active' => $this->is_active,
-            'is_deleted' => $this->is_deleted,
+            'is_deleted' => 0,
         ]);
 
         $query->andFilterWhere(['like', 'name', $this->name])

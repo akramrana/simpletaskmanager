@@ -8,6 +8,7 @@ use yii\bootstrap\Nav;
 use yii\bootstrap\NavBar;
 use yii\widgets\Breadcrumbs;
 use app\assets\AppAsset;
+use yii\helpers\BaseUrl;
 
 AppAsset::register($this);
 ?>
@@ -21,6 +22,11 @@ AppAsset::register($this);
         <?php $this->registerCsrfMetaTags() ?>
         <title><?= Html::encode($this->title) ?></title>
         <?php $this->head() ?>
+        <script type="application/javascript">
+            var baseUrl = '<?php echo BaseUrl::home(); ?>';
+            var _csrf = '<?php echo Yii::$app->request->getCsrfToken() ?>';
+            var _system_date = '<?php echo date('Y-m-d') ?>';
+        </script>
     </head>
     <body>
         <?php $this->beginBody() ?>
@@ -63,7 +69,7 @@ AppAsset::register($this);
                             '<li>'
                             . Html::beginForm(['/site/logout'], 'post')
                             . Html::submitButton(
-                                    'Logout (' . Yii::$app->user->identity->username . ')',
+                                    'Logout (' . Yii::$app->user->identity->name . ')',
                                     ['class' => 'btn btn-link logout']
                             )
                             . Html::endForm()
@@ -90,6 +96,14 @@ AppAsset::register($this);
                 <p class="pull-left">&copy; Akram Hossain <?= date('Y') ?></p>
             </div>
         </footer>
+
+        <div class="global-loader">
+            <div class="main-content">
+                <div class="loading">
+                    <img src="<?php echo BaseUrl::home() ?>images/loading-bars.svg" alt="loading"/>
+                </div>
+            </div>
+        </div>
 
         <?php $this->endBody() ?>
     </body>

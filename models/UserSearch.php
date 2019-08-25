@@ -61,6 +61,7 @@ class UserSearch extends Users
             'id' => $this->id,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
+            'is_deleted' => 0,
         ]);
 
         $query->andFilterWhere(['like', 'first_name', $this->first_name])
