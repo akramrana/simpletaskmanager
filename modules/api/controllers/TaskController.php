@@ -54,7 +54,6 @@ class TaskController extends Controller{
     public function actionCreate()
     {
         $request = Yii::$app->request->bodyParams;
-        debugPrint($request);
         return $this->response();
     }
 }
