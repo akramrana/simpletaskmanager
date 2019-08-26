@@ -16,7 +16,6 @@ $this->params['breadcrumbs'][] = $this->title;
     <h1><?= Html::encode($this->title) ?></h1>
 
     <p>
-        <?= Html::a('Update', ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
         <?= Html::a('Delete', ['delete', 'id' => $model->id], [
             'class' => 'btn btn-danger',
             'data' => [
@@ -29,11 +28,20 @@ $this->params['breadcrumbs'][] = $this->title;
     <?= DetailView::widget([
         'model' => $model,
         'attributes' => [
-            'parent_id',
-            'user_id',
+            [
+                'attribute' => 'parent_id',
+                'value' => $model->getParentTitle($model->parent_id)
+            ],
+            [
+                'attribute' => 'user_id',
+                'value' => $model->user->first_name.' '.$model->user->last_name
+            ],
             'title',
             'points',
-            'is_done',
+            [
+                'attribute' => 'is_done',
+                'value' => ($model->is_done)?"Yes":"No"
+            ],
             'created_at',
             'updated_at',
         ],

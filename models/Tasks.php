@@ -38,6 +38,7 @@ class Tasks extends ActiveRecord {
             [['user_id', 'title', 'points', 'created_at', 'updated_at'], 'required'],
             [['created_at', 'updated_at'], 'safe'],
             [['title'], 'string', 'max' => 50],
+            [['points'], 'number', 'min' => 1, 'max' => 10],
             [['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => Users::className(), 'targetAttribute' => ['user_id' => 'id']],
         ];
     }
@@ -52,7 +53,7 @@ class Tasks extends ActiveRecord {
             'user_id' => 'User',
             'title' => 'Title',
             'points' => 'Points',
-            'is_done' => 'Is Done',
+            'is_done' => 'Done?',
             'created_at' => 'Created At',
             'updated_at' => 'Updated At',
         ];
@@ -65,4 +66,9 @@ class Tasks extends ActiveRecord {
         return $this->hasOne(Users::className(), ['id' => 'user_id']);
     }
 
+    public function getParentTitle($parent_id)
+    {
+        $model = Tasks::findOne($parent_id);
+        return !empty($model)?$model->title:"";
+    }
 }

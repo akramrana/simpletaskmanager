@@ -14,28 +14,40 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <h1><?= Html::encode($this->title) ?></h1>
 
-    <p>
-        <?= Html::a('Create Tasks', ['create'], ['class' => 'btn btn-success']) ?>
-    </p>
-
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
-    <?= GridView::widget([
+    <?=
+    GridView::widget([
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
-            'parent_id',
-            'user_id',
+            [
+                'attribute' => 'parent_id',
+                'value' => function($model) {
+                    $parentTitle = $model->getParentTitle($model->parent_id);
+                    return $parentTitle;
+                }
+            ],
+            [
+                'attribute' => 'user_id',
+                'value' => function($model) {
+                    return $model->user->first_name . ' ' . $model->user->last_name;
+                }
+            ],
             'title',
             'points',
-            //'is_done',
-            //'created_at',
-            //'updated_at',
-
-            ['class' => 'yii\grid\ActionColumn'],
+            [
+                'attribute' => 'is_done',
+                'value' => function($model) {
+                    return ($model->is_done == 1) ? "Yes" : "No";
+                }
+            ],
+            'created_at',
+            'updated_at',
         ],
-    ]); ?>
+    ]);
+    ?>
 
 
 </div>
