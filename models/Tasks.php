@@ -3,6 +3,8 @@
 namespace app\models;
 
 use Yii;
+use yii\db\ActiveRecord;
+use yii\behaviors\TimestampBehavior;
 
 /**
  * This is the model class for table "tasks".
@@ -18,21 +20,19 @@ use Yii;
  *
  * @property Users $user
  */
-class Tasks extends \yii\db\ActiveRecord
-{
+class Tasks extends ActiveRecord {
+
     /**
      * {@inheritdoc}
      */
-    public static function tableName()
-    {
+    public static function tableName() {
         return 'tasks';
     }
 
     /**
      * {@inheritdoc}
      */
-    public function rules()
-    {
+    public function rules() {
         return [
             [['parent_id', 'user_id', 'points', 'is_done'], 'integer'],
             [['user_id', 'title', 'points', 'created_at', 'updated_at'], 'required'],
@@ -45,8 +45,7 @@ class Tasks extends \yii\db\ActiveRecord
     /**
      * {@inheritdoc}
      */
-    public function attributeLabels()
-    {
+    public function attributeLabels() {
         return [
             'id' => 'ID',
             'parent_id' => 'Parent',
@@ -62,8 +61,8 @@ class Tasks extends \yii\db\ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getUser()
-    {
+    public function getUser() {
         return $this->hasOne(Users::className(), ['id' => 'user_id']);
     }
+
 }

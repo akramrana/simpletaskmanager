@@ -49,7 +49,7 @@ class User extends ActiveRecord implements IdentityInterface
      */
     public static function findByUsername($username)
     {
-        return static::findOne(['email' => $username,'is_deleted' => self::STATUS_DELETED,'is_active' => self::STATUS_DELETED]);
+        return static::findOne(['email' => $username,'is_deleted' => self::STATUS_DELETED,'is_active' => self::STATUS_ACTIVE]);
     }
 
     /**
