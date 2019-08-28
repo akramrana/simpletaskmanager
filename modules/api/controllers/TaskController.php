@@ -58,7 +58,7 @@ class TaskController extends Controller {
                 $this->message = "User does not exist.";
                 return $this->response();
             }
-            if (empty($request['parent_id'])) {
+            if (!empty($request['parent_id'])) {
                 $parent = \app\models\Tasks::findOne($request['parent_id']);
                 if (empty($parent)) {
                     $this->response_code = 404;
@@ -78,7 +78,7 @@ class TaskController extends Controller {
             $model->parent_id = isset($request['parent_id']) ? $request['parent_id'] : null;
             $model->user_id = $request['user_id'];
             $model->title = $request['title'];
-            $model->points = isset($request['points']) ? $request['points'] : "";
+            $model->points = $request['points'];
             $model->is_done = $request['is_done'];
             $model->created_at = date('Y-m-d H:i:s');
             $model->updated_at = date('Y-m-d H:i:s');
@@ -156,9 +156,7 @@ class TaskController extends Controller {
                 $model->parent_id = isset($request['parent_id']) ? $request['parent_id'] : null;
                 $model->user_id = $request['user_id'];
                 $model->title = $request['title'];
-                if ($model->parent_id != null) {
-                    $model->points = $request['points'];
-                }
+                $model->points = $request['points'];
                 $model->is_done = $request['is_done'];
                 $model->updated_at = date('Y-m-d H:i:s');
                 if ($model->save()) {
