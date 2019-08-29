@@ -10,13 +10,12 @@ use yii\filters\VerbFilter;
 use app\models\LoginForm;
 use app\models\ContactForm;
 
-class SiteController extends Controller
-{
+class SiteController extends Controller {
+
     /**
      * {@inheritdoc}
      */
-    public function behaviors()
-    {
+    public function behaviors() {
         return [
             'access' => [
                 'class' => AccessControl::className(),
@@ -41,8 +40,7 @@ class SiteController extends Controller
     /**
      * {@inheritdoc}
      */
-    public function actions()
-    {
+    public function actions() {
         return [
             'error' => [
                 'class' => 'yii\web\ErrorAction',
@@ -59,9 +57,55 @@ class SiteController extends Controller
      *
      * @return string
      */
-    public function actionIndex()
-    {
-        return $this->render('index');
+    public function actionIndex() {
+        $users = \app\models\Users::find()
+                ->select([
+                    'users.*',
+                    '(select count(id) from tasks where user_id = users.id and is_done = 1) as task_count',
+                    '(select SUM(points) from tasks where user_id = users.id and is_done = 1) as task_point'
+                ])
+                ->where(['is_deleted' => 0])
+                ->asArray()
+                ->all();
+        $data = [];
+        if (!empty($users)) {
+            foreach ($users as $usr) {
+                $parentTasks = \app\models\Tasks::find()
+                        ->where(['user_id' => $usr['id'], 'is_done' => 1])
+                        ->andWhere(['IS', 'parent_id', new \yii\db\Expression('NULL')])
+                        ->asArray()
+                        ->all();
+                $tasks = [];
+                if (!empty($parentTasks)) {
+                    foreach ($parentTasks as $pt) {
+                        $pt['sub_task'] = $this->getSubtasks($usr['id'],$pt['id']);
+                        array_push($tasks, $pt);
+                    }
+                }
+                $usr['parent_task'] = $tasks;
+                array_push($data, $usr);
+            }
+        }
+        //debugPrint($data);
+        return $this->render('index', [
+                    'users' => $data
+        ]);
+    }
+
+    private function getSubtasks($uid,$id) {
+        $models = \app\models\Tasks::find()
+                ->where(['user_id' => $uid, 'is_done' => 1])
+                ->andWhere(['=', 'parent_id', $id])
+                ->asArray()
+                ->all();
+        $tasks = [];
+        if (!empty($models)) {
+            foreach ($models as $model) {
+                $pt['sub_task'] = $this->getSubtasks($uid,$model['id']);
+                array_push($tasks, $model);
+            }
+        }
+        return $tasks;
     }
 
     /**
@@ -69,8 +113,7 @@ class SiteController extends Controller
      *
      * @return Response|string
      */
-    public function actionLogin()
-    {
+    public function actionLogin() {
         if (!Yii::$app->user->isGuest) {
             return $this->goHome();
         }
@@ -82,7 +125,7 @@ class SiteController extends Controller
 
         $model->password = '';
         return $this->render('login', [
-            'model' => $model,
+                    'model' => $model,
         ]);
     }
 
@@ -91,8 +134,7 @@ class SiteController extends Controller
      *
      * @return Response
      */
-    public function actionLogout()
-    {
+    public function actionLogout() {
         Yii::$app->user->logout();
 
         return $this->goHome();
@@ -103,8 +145,7 @@ class SiteController extends Controller
      *
      * @return Response|string
      */
-    public function actionContact()
-    {
+    public function actionContact() {
         $model = new ContactForm();
         if ($model->load(Yii::$app->request->post()) && $model->contact(Yii::$app->params['adminEmail'])) {
             Yii::$app->session->setFlash('contactFormSubmitted');
@@ -112,7 +153,7 @@ class SiteController extends Controller
             return $this->refresh();
         }
         return $this->render('contact', [
-            'model' => $model,
+                    'model' => $model,
         ]);
     }
 
@@ -121,8 +162,8 @@ class SiteController extends Controller
      *
      * @return string
      */
-    public function actionAbout()
-    {
+    public function actionAbout() {
         return $this->render('about');
     }
+
 }
