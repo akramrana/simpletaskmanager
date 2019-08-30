@@ -64,10 +64,10 @@ class SiteController extends Controller {
         $users = \app\models\Users::find()
                 ->select([
                     'users.*',
-                    '(select count(id) from tasks where user_id = users.id and is_done = 1) as task_count',
+                    '(select count(id) from tasks where user_id = users.id and is_done = 1) as total_task_count',
                 ])
                 ->where(['is_deleted' => 0])
-                ->andHaving(['>','task_count',0])
+                ->andHaving(['>','total_task_count',0])
                 ->asArray()
                 ->all();
         $data = [];
@@ -86,6 +86,7 @@ class SiteController extends Controller {
                     }
                 }
                 $usr['task_point'] = \app\helpers\AppHelper::calculateUsertaskPoint($usr['id']);
+                $usr['task_count'] = \app\helpers\AppHelper::calculateUsertaskCount($usr['id']);
                 $usr['parent_task'] = $tasks;
                 array_push($data, $usr);
             }

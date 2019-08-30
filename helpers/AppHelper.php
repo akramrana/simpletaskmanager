@@ -25,14 +25,14 @@ class AppHelper {
             $htm = '<ul>';
             foreach ($tasks as $t) {
                 $hasSubtask = self::checkSubtask($uid, $t['id']);
-                $points = self::calculateTaskPoint($uid,$t['id']);
+                $points = self::calculateTaskPoint($uid, $t['id']);
                 $listStyle = '';
                 if ($hasSubtask) {
                     $listStyle = 'list-style-type:none;';
                 }
                 $htm .= '<li>' . $t['title'] . '(' . $points . ')</li>';
                 if (!empty($t['sub_task'])) {
-                    $htm .= '<li style="'.$listStyle.'">' . self::generateRecursiveTaskList($uid, $t['sub_task']) . '</li>';
+                    $htm .= '<li style="' . $listStyle . '">' . self::generateRecursiveTaskList($uid, $t['sub_task']) . '</li>';
                 }
             }
             $htm .= '</ul>';
@@ -69,55 +69,68 @@ class AppHelper {
                 ->asArray()
                 ->all();
         $points = 0;
-        if(!empty($models)){
-            foreach ($models as $row){
+        if (!empty($models)) {
+            foreach ($models as $row) {
                 $hasSubtask = self::checkSubtask($uid, $row['id']);
-                if($hasSubtask== false){
-                    $points+=$row['points'];
+                if ($hasSubtask == false) {
+                    $points += $row['points'];
                 }
             }
         }
         return $points;
     }
 
-    
-    
-    static function calculateTaskPoint($uid,$id)
-    {
+    static function calculateTaskPoint($uid, $id) {
         $model = \app\models\Tasks::find()
-                ->where(['user_id' => $uid,'id' => $id])
+                ->where(['user_id' => $uid, 'id' => $id])
                 ->asArray()
                 ->one();
         $points = 0;
-        if(!empty($model)){
+        if (!empty($model)) {
             $hasSubtask = self::checkSubtask($uid, $model['id']);
-            if($hasSubtask== false){
-                $points+=$model['points'];
-            }else{
-                $points+= self::getUserSubtaskPoint($uid, $model['id']);
+            if ($hasSubtask == false) {
+                $points += $model['points'];
+            } else {
+                $points += self::getUserSubtaskPoint($uid, $model['id']);
             }
         }
         return $points;
     }
-    
-    static function getUserSubtaskPoint($uid,$id)
-    {
+
+    static function getUserSubtaskPoint($uid, $id) {
         $models = \app\models\Tasks::find()
-                ->where(['user_id' => $uid,'parent_id' => $id])
+                ->where(['user_id' => $uid, 'parent_id' => $id])
                 ->asArray()
                 ->all();
         $points = 0;
-        if(!empty($models)){
-            foreach ($models as $row){
+        if (!empty($models)) {
+            foreach ($models as $row) {
                 $hasSubtask = self::checkSubtask($uid, $row['id']);
-                if($hasSubtask== false){
-                    $points+=$row['points'];
-                }else{
-                    $points+= self::getUserSubtaskPoint($uid, $row['id']);
+                if ($hasSubtask == false) {
+                    $points += $row['points'];
+                } else {
+                    $points += self::getUserSubtaskPoint($uid, $row['id']);
                 }
             }
         }
         return $points;
     }
-    
+
+    static function calculateUsertaskCount($uid) {
+        $models = \app\models\Tasks::find()
+                ->where(['user_id' => $uid])
+                ->asArray()
+                ->all();
+        $count = 0;
+        if (!empty($models)) {
+            foreach ($models as $row) {
+                $hasSubtask = self::checkSubtask($uid, $row['id']);
+                if ($hasSubtask == false) {
+                    $count+=1;
+                }
+            }
+        }
+        return $count;
+    }
+
 }
