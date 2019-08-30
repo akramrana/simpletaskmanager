@@ -58,13 +58,16 @@ class SiteController extends Controller {
      * @return string
      */
     public function actionIndex() {
+        if (Yii::$app->user->isGuest) {
+            return $this->redirect('site/login');
+        }
         $users = \app\models\Users::find()
                 ->select([
                     'users.*',
                     '(select count(id) from tasks where user_id = users.id and is_done = 1) as task_count',
-                    '(select SUM(points) from tasks where user_id = users.id and is_done = 1) as task_point'
                 ])
                 ->where(['is_deleted' => 0])
+                ->andHaving(['>','task_count',0])
                 ->asArray()
                 ->all();
         $data = [];
@@ -82,11 +85,11 @@ class SiteController extends Controller {
                         array_push($tasks, $pt);
                     }
                 }
+                $usr['task_point'] = \app\helpers\AppHelper::calculateUsertaskPoint($usr['id']);
                 $usr['parent_task'] = $tasks;
                 array_push($data, $usr);
             }
         }
-        //debugPrint($data);
         return $this->render('index', [
                     'users' => $data
         ]);
@@ -101,7 +104,7 @@ class SiteController extends Controller {
         $tasks = [];
         if (!empty($models)) {
             foreach ($models as $model) {
-                $pt['sub_task'] = $this->getSubtasks($uid,$model['id']);
+                $model['sub_task'] = $this->getSubtasks($uid,$model['id']);
                 array_push($tasks, $model);
             }
         }

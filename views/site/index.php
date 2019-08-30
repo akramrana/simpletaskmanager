@@ -21,16 +21,17 @@ $this->title = 'Home';
                                 echo $usr['first_name'] . ' ' . $usr['last_name'] . '(' . $usr['task_count'] . '/' . $usr['task_point'] . ')';
                                 ?>
                                 <hr/>
-                                <ul>
+                                <ul style="padding-left: 12px;">
                                     <?php
                                     if (!empty($usr['parent_task'])) {
                                         foreach ($usr['parent_task'] as $pt) {
+                                            $points = \app\helpers\AppHelper::calculateTaskPoint($usr['id'],$pt['id']);
                                             ?>
                                             <li>
-                                                <?= $pt['title']; ?>
+                                                <?= $pt['title']; ?>(<?= $points; ?>)
                                                 <?php
                                                 if(!empty($pt['sub_task'])){
-                                                    echo generateRecursiveTaskList($pt['sub_task']);
+                                                    echo \app\helpers\AppHelper::generateRecursiveTaskList($usr['id'],$pt['sub_task']);
                                                 }
                                                 ?>
                                             </li>
