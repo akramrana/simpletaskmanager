@@ -16,10 +16,12 @@ namespace app\helpers;
 
 use Yii;
 
-class AppHelper {
+class AppHelper
+{
 
     //put your code here
-    static function generateRecursiveTaskList($uid, $tasks) {
+    static function generateRecursiveTaskList($uid, $tasks)
+    {
         $htm = '';
         if (!empty($tasks)) {
             $htm = '<ul>';
@@ -40,7 +42,8 @@ class AppHelper {
         return $htm;
     }
 
-    static function calculateSubtaskPoint($uid, $id) {
+    static function calculateSubtaskPoint($uid, $id)
+    {
         $model = \app\models\Tasks::find()
                 ->select([
                     'SUM(points) as total_points'
@@ -51,7 +54,8 @@ class AppHelper {
         return isset($model['total_points']) ? $model['total_points'] : 0;
     }
 
-    static function checkSubtask($uid, $id) {
+    static function checkSubtask($uid, $id)
+    {
         $query = \app\models\Tasks::find()
                 ->where(['parent_id' => $id, 'user_id' => $uid]);
         //echo $query->createCommand()->rawSql;
@@ -63,7 +67,8 @@ class AppHelper {
         }
     }
 
-    static function calculateUsertaskPoint($uid) {
+    static function calculateUsertaskPoint($uid)
+    {
         $models = \app\models\Tasks::find()
                 ->where(['user_id' => $uid])
                 ->asArray()
@@ -80,7 +85,8 @@ class AppHelper {
         return $points;
     }
 
-    static function calculateTaskPoint($uid, $id) {
+    static function calculateTaskPoint($uid, $id)
+    {
         $model = \app\models\Tasks::find()
                 ->where(['user_id' => $uid, 'id' => $id])
                 ->asArray()
@@ -97,7 +103,8 @@ class AppHelper {
         return $points;
     }
 
-    static function getUserSubtaskPoint($uid, $id) {
+    static function getUserSubtaskPoint($uid, $id)
+    {
         $models = \app\models\Tasks::find()
                 ->where(['user_id' => $uid, 'parent_id' => $id])
                 ->asArray()
@@ -116,7 +123,8 @@ class AppHelper {
         return $points;
     }
 
-    static function calculateUsertaskCount($uid) {
+    static function calculateUsertaskCount($uid)
+    {
         $models = \app\models\Tasks::find()
                 ->where(['user_id' => $uid])
                 ->asArray()
@@ -126,7 +134,7 @@ class AppHelper {
             foreach ($models as $row) {
                 $hasSubtask = self::checkSubtask($uid, $row['id']);
                 if ($hasSubtask == false) {
-                    $count+=1;
+                    $count += 1;
                 }
             }
         }

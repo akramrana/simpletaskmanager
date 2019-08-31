@@ -16,13 +16,15 @@ use yii\rest\Controller;
  *
  * @author akram
  */
-class TaskController extends Controller {
+class TaskController extends Controller
+{
 
     public $data;
     public $message = "";
     public $response_code = 201;
 
-    public function init() {
+    public function init()
+    {
         $headers = Yii::$app->response->headers;
         $headers->add("Cache-Control", "no-cache, no-store, must-revalidate");
         $headers->add("Pragma", "no-cache");
@@ -33,7 +35,8 @@ class TaskController extends Controller {
      *
      * @return array
      */
-    private function response() {
+    private function response()
+    {
         Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
         $response = $this->data;
         if (empty($response)) {
@@ -47,7 +50,8 @@ class TaskController extends Controller {
         return $data;
     }
 
-    public function actionCreate() {
+    public function actionCreate()
+    {
         $request = Yii::$app->request->bodyParams;
         if (!empty($request)) {
             $user = \app\models\Users::find()
@@ -124,7 +128,8 @@ class TaskController extends Controller {
         return $this->response();
     }
 
-    public function actionUpdate($id) {
+    public function actionUpdate($id)
+    {
         $request = Yii::$app->request->bodyParams;
         if (!empty($request)) {
             $user = \app\models\Users::find()

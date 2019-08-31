@@ -14,6 +14,7 @@ use yii\filters\VerbFilter;
  */
 class TaskController extends Controller
 {
+
     /**
      * {@inheritdoc}
      */
@@ -39,8 +40,8 @@ class TaskController extends Controller
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
         return $this->render('index', [
-            'searchModel' => $searchModel,
-            'dataProvider' => $dataProvider,
+                    'searchModel' => $searchModel,
+                    'dataProvider' => $dataProvider,
         ]);
     }
 
@@ -59,4 +60,5 @@ class TaskController extends Controller
 
         throw new NotFoundHttpException('The requested page does not exist.');
     }
+
 }

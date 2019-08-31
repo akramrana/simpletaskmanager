@@ -12,7 +12,8 @@ use yii\filters\VerbFilter;
 /**
  * AdminController implements the CRUD actions for Admins model.
  */
-class AdminController extends Controller {
+class AdminController extends Controller
+{
 
     /**
      * {@inheritdoc}
@@ -143,7 +144,7 @@ class AdminController extends Controller {
             return json_encode($model->errors);
         }
     }
-    
+
     /**
      * Finds the Admins model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.

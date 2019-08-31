@@ -10,12 +10,14 @@ use yii\filters\VerbFilter;
 use app\models\LoginForm;
 use app\models\ContactForm;
 
-class SiteController extends Controller {
+class SiteController extends Controller
+{
 
     /**
      * {@inheritdoc}
      */
-    public function behaviors() {
+    public function behaviors()
+    {
         return [
             'access' => [
                 'class' => AccessControl::className(),
@@ -40,7 +42,8 @@ class SiteController extends Controller {
     /**
      * {@inheritdoc}
      */
-    public function actions() {
+    public function actions()
+    {
         return [
             'error' => [
                 'class' => 'yii\web\ErrorAction',
@@ -57,7 +60,8 @@ class SiteController extends Controller {
      *
      * @return string
      */
-    public function actionIndex() {
+    public function actionIndex()
+    {
         if (Yii::$app->user->isGuest) {
             return $this->redirect('site/login');
         }
@@ -67,7 +71,7 @@ class SiteController extends Controller {
                     '(select count(id) from tasks where user_id = users.id and is_done = 1) as total_task_count',
                 ])
                 ->where(['is_deleted' => 0])
-                ->andHaving(['>','total_task_count',0])
+                ->andHaving(['>', 'total_task_count', 0])
                 ->asArray()
                 ->all();
         $data = [];
@@ -81,7 +85,7 @@ class SiteController extends Controller {
                 $tasks = [];
                 if (!empty($parentTasks)) {
                     foreach ($parentTasks as $pt) {
-                        $pt['sub_task'] = $this->getSubtasks($usr['id'],$pt['id']);
+                        $pt['sub_task'] = $this->getSubtasks($usr['id'], $pt['id']);
                         array_push($tasks, $pt);
                     }
                 }
@@ -96,7 +100,8 @@ class SiteController extends Controller {
         ]);
     }
 
-    private function getSubtasks($uid,$id) {
+    private function getSubtasks($uid, $id)
+    {
         $models = \app\models\Tasks::find()
                 ->where(['user_id' => $uid, 'is_done' => 1])
                 ->andWhere(['=', 'parent_id', $id])
@@ -105,7 +110,7 @@ class SiteController extends Controller {
         $tasks = [];
         if (!empty($models)) {
             foreach ($models as $model) {
-                $model['sub_task'] = $this->getSubtasks($uid,$model['id']);
+                $model['sub_task'] = $this->getSubtasks($uid, $model['id']);
                 array_push($tasks, $model);
             }
         }
@@ -117,7 +122,8 @@ class SiteController extends Controller {
      *
      * @return Response|string
      */
-    public function actionLogin() {
+    public function actionLogin()
+    {
         if (!Yii::$app->user->isGuest) {
             return $this->goHome();
         }
@@ -138,7 +144,8 @@ class SiteController extends Controller {
      *
      * @return Response
      */
-    public function actionLogout() {
+    public function actionLogout()
+    {
         Yii::$app->user->logout();
 
         return $this->goHome();
@@ -149,7 +156,8 @@ class SiteController extends Controller {
      *
      * @return Response|string
      */
-    public function actionContact() {
+    public function actionContact()
+    {
         $model = new ContactForm();
         if ($model->load(Yii::$app->request->post()) && $model->contact(Yii::$app->params['adminEmail'])) {
             Yii::$app->session->setFlash('contactFormSubmitted');
@@ -166,7 +174,8 @@ class SiteController extends Controller {
      *
      * @return string
      */
-    public function actionAbout() {
+    public function actionAbout()
+    {
         return $this->render('about');
     }
 

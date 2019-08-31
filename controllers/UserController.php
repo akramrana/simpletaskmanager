@@ -12,12 +12,14 @@ use yii\filters\VerbFilter;
 /**
  * UserController implements the CRUD actions for Users model.
  */
-class UserController extends Controller {
+class UserController extends Controller
+{
 
     /**
      * {@inheritdoc}
      */
-    public function behaviors() {
+    public function behaviors()
+    {
         return [
             'verbs' => [
                 'class' => VerbFilter::className(),
@@ -32,7 +34,8 @@ class UserController extends Controller {
      * Lists all Users models.
      * @return mixed
      */
-    public function actionIndex() {
+    public function actionIndex()
+    {
         //check api for new users
         $this->reloadUsers();
         $searchModel = new UserSearch();
@@ -49,7 +52,8 @@ class UserController extends Controller {
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
      */
-    public function actionView($id) {
+    public function actionView($id)
+    {
         return $this->render('view', [
                     'model' => $this->findModel($id),
         ]);
@@ -62,7 +66,8 @@ class UserController extends Controller {
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
      */
-    public function actionDelete($id) {
+    public function actionDelete($id)
+    {
         $model = $this->findModel($id);
         $model->is_deleted = 1;
         $model->save();
@@ -78,7 +83,8 @@ class UserController extends Controller {
      * if some users deleted from api, this method will remove those users from db as well
      * if any user exist in db, this method will update the user data instead create
      */
-    private function reloadUsers() {
+    private function reloadUsers()
+    {
         if (!empty(Yii::$app->session['_request_date_time'])) {
             $requestDate = new \DateTime(Yii::$app->session['_request_date_time'], new \DateTimeZone(date_default_timezone_get()));
             $requestDateTime = new \DateTime($requestDate->format('Y-m-d H:i:s'));
@@ -152,7 +158,8 @@ class UserController extends Controller {
      * @return Users the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
-    protected function findModel($id) {
+    protected function findModel($id)
+    {
         if (($model = Users::findOne($id)) !== null) {
             return $model;
         }
