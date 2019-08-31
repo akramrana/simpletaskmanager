@@ -91,8 +91,8 @@ return [
 API Endpoints
 -------------
 ### Add Task Api
-Method: HTTP POST
-Request URI: http://localhost/taskmanager/api/task
+Method: HTTP POST<br/>
+Request URI: http://localhost/taskmanager/api/task<br/>
 Request Data:
 ```
 {
@@ -123,8 +123,8 @@ Response Data:
 ```
 
 ### Update Task Api
-Method: HTTP PUT
-Request URI: http://localhost/taskmanager/api/task/18
+Method: HTTP PUT<br/>
+Request URI: http://localhost/taskmanager/api/task/18<br/>
 Request Data:
 ```
 {
