@@ -5,7 +5,7 @@
 
 Simple task manager application best use for managing tasks for multiple user.
 
-The project contains the 3 basic features including admin,tasks and user management.
+The project contains the 4 basic features including admin,tasks and user management and API endpoint for task.
 It includes all commonly used configurations that would allow you to focus on adding new
 features to your application.
 
@@ -82,3 +82,74 @@ return [
 **NOTES:**
 - That project won't create the database for you, this has to be done manually before you can access it.
 - Check and import the `taskmanager.sql` file from the `web/` directory to your MySQL Server.
+
+
+**Admin Login:**
+- User ID `akram.hossain@lezasolutions.net`.
+- Password `123123`
+
+API Endpoints
+-------------
+### Add Task Api
+Method: HTTP POST
+Request URI: http://localhost/taskmanager/api/task
+Request Data:
+```
+{
+    "parent_id":"16",
+    "user_id":3,
+    "title":"Task Lorem 1.1",
+    "points":2,
+    "is_done":1,
+    "email":"john.koe@email.com"
+}
+```
+Response Data:
+```
+{
+    "status": 201,
+    "message": "success",
+    "data": {
+        "id": 18,
+        "parent_id": "16",
+        "user_id": 3,
+        "title": "Task Lorem 1.1",
+        "points": 2,
+        "is_done": 1,
+        "created_at": "2019-08-31 12:26:39",
+        "updated_at": "2019-08-31 12:26:39"
+    }
+}
+```
+
+### Update Task Api
+Method: HTTP PUT
+Request URI: http://localhost/taskmanager/api/task/18
+Request Data:
+```
+{
+    "parent_id":"16",
+    "user_id":3,
+    "title":"Task Lorem 1.1",
+    "points":3,
+    "is_done":0,
+    "email":"john.koe@email.com"
+}
+```
+Response Data:
+```
+{
+    "status": 201,
+    "message": "success",
+    "data": {
+        "id": 18,
+        "parent_id": "16",
+        "user_id": 3,
+        "title": "Task Lorem 1.1",
+        "points": 3,
+        "is_done": 0,
+        "created_at": "2019-08-31 12:26:39",
+        "updated_at": "2019-08-31 12:39:08"
+    }
+}
+```
