@@ -92,6 +92,18 @@ class TaskController extends Controller
                     $parent->is_done = 0;
                     $parent->save();
                 }
+                if ($model->parent_id != null && $model->is_done == 1) {
+                    $totalSubTask = \app\models\Tasks::find()
+                            ->where(['parent_id' => $parent->id])
+                            ->count();
+                    $totalSubTaskDone = \app\models\Tasks::find()
+                            ->where(['parent_id' => $parent->id, 'is_done' => 1])
+                            ->count();
+                    if ($totalSubTask == $totalSubTaskDone) {
+                        $parent->is_done = 1;
+                        $parent->save();
+                    }
+                }
                 if ($model->parent_id == null && $model->is_done == 1) {
                     \app\models\Tasks::updateAll(['is_done' => 1], ['parent_id' => $model->id]);
                 }
@@ -180,6 +192,18 @@ class TaskController extends Controller
                     if ($model->parent_id != null && $model->is_done == 0) {
                         $parent->is_done = 0;
                         $parent->save();
+                    }
+                    if ($model->parent_id != null && $model->is_done == 1) {
+                        $totalSubTask = \app\models\Tasks::find()
+                                ->where(['parent_id' => $parent->id])
+                                ->count();
+                        $totalSubTaskDone = \app\models\Tasks::find()
+                                ->where(['parent_id' => $parent->id, 'is_done' => 1])
+                                ->count();
+                        if ($totalSubTask == $totalSubTaskDone) {
+                            $parent->is_done = 1;
+                            $parent->save();
+                        }
                     }
                     if ($model->parent_id == null && $model->is_done == 1) {
                         \app\models\Tasks::updateAll(['is_done' => 1], ['parent_id' => $model->id]);
