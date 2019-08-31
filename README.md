@@ -81,4 +81,4 @@ return [
 
 **NOTES:**
 - That project won't create the database for you, this has to be done manually before you can access it.
-- Check and import the db.sql file from the `web/` directory to your MySQL Server.
+- Check and import the `taskmanager.sql` file from the `web/` directory to your MySQL Server.
